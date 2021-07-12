@@ -1,2 +1,2 @@
 web: yarn serve:prod
-web: node smtp.js
+worker: node smtp.js
