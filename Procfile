@@ -1,2 +1,2 @@
-frontend: yarn build && yarn serve:prod
-express: node smtp.js
+web: yarn build && yarn serve:prod
+worker: node smtp.js
