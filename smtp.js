@@ -4,7 +4,25 @@ const multer = require('multer')
 const cors = require('cors')
 const nodemailer = require('nodemailer')
 
-require('dotenv').config({ path: '.env.local' })
+let accountUsername
+let smtpAccountPassword
+let fromEmail
+
+// Heroku by default set NODE_ENV to production
+if (process.env.NODE_ENV === 'production') {
+  const aws = require('aws-sdk')
+
+  const s3 = new aws.S3({
+    accountUsername: process.env.ACCOUNT_USERNAME,
+    smtpAccountPassword: process.env.SMTP_ACCOUNT_PASSWORD,
+    fromEmail: process.env.FROM_EMAIL
+  })
+} else {
+  require('dotenv').config({ path: '.env.local' })
+  accountUsername = process.env.ACCOUNT_USERNAME
+  smtpAccountPassword = process.env.SMTP_ACCOUNT_PASSWORD
+  fromEmail = process.env.FROM_EMAIL
+}
 
 const upload = multer()
 const app = express()
@@ -29,7 +47,7 @@ app.use(
 
 app.post('/email', (req, res) => {
   const mailOptions = {
-    from: process.env.FROM_EMAIL,
+    from: fromEmail,
     to: req.body.sendToEmail,
     subject: 'Your Currency Converter Results',
     html: req.body.message
@@ -38,8 +56,8 @@ app.post('/email', (req, res) => {
   const smtpTransport = nodemailer.createTransport({
     service: 'FastMail',
     auth: {
-      user: process.env.ACCOUNT_USERNAME,
-      pass: process.env.SMTP_ACCOUNT_PASSWORD
+      user: accountUsername,
+      pass: smtpAccountPassword
     }
   })
 
