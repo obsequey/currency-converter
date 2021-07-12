@@ -144,7 +144,7 @@ export default {
       }
 
       this.sendingEmail = true
-      await fetch('http://localhost:3000/email', {
+      await fetch('https://zjmpyr63-currency-converter-2.herokuapp.com/email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
