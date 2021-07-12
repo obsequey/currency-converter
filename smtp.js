@@ -8,6 +8,7 @@ let accountUsername
 let smtpAccountPassword
 let fromEmail
 let allowedOrigins
+let port
 
 // Heroku by default set NODE_ENV to production
 if (process.env.NODE_ENV === 'production') {
@@ -16,7 +17,8 @@ if (process.env.NODE_ENV === 'production') {
   const s3 = new aws.S3({
     accountUsername: process.env.ACCOUNT_USERNAME,
     smtpAccountPassword: process.env.SMTP_ACCOUNT_PASSWORD,
-    fromEmail: process.env.FROM_EMAIL
+    fromEmail: process.env.FROM_EMAIL,
+    port: process.env.PORT
   })
   allowedOrigins = ['https://zjmpyr63-currency-converter.herokuapp.com']
 } else {
@@ -24,13 +26,12 @@ if (process.env.NODE_ENV === 'production') {
   accountUsername = process.env.ACCOUNT_USERNAME
   smtpAccountPassword = process.env.SMTP_ACCOUNT_PASSWORD
   fromEmail = process.env.FROM_EMAIL
+  port = process.env.EXPRESS_PORT
   allowedOrigins = ['http://localhost:5000', 'http://localhost:8080']
 }
 
 const upload = multer()
 const app = express()
-
-const port = process.env.EXPRESS_PORT
 
 app.use(bodyParser.json())
 app.use(
