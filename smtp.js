@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer')
 let accountUsername
 let smtpAccountPassword
 let fromEmail
+let allowedOrigins
 
 // Heroku by default set NODE_ENV to production
 if (process.env.NODE_ENV === 'production') {
@@ -17,18 +18,19 @@ if (process.env.NODE_ENV === 'production') {
     smtpAccountPassword: process.env.SMTP_ACCOUNT_PASSWORD,
     fromEmail: process.env.FROM_EMAIL
   })
+  allowedOrigins = ['https://zjmpyr63-currency-converter.herokuapp.com']
 } else {
   require('dotenv').config({ path: '.env.local' })
   accountUsername = process.env.ACCOUNT_USERNAME
   smtpAccountPassword = process.env.SMTP_ACCOUNT_PASSWORD
   fromEmail = process.env.FROM_EMAIL
+  allowedOrigins = ['http://localhost:5000', 'http://localhost:8080']
 }
 
 const upload = multer()
 const app = express()
 
 const port = process.env.EXPRESS_PORT
-const allowedOrigins = ['http://localhost:5000', 'http://localhost:8080']
 
 app.use(bodyParser.json())
 app.use(
