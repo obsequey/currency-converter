@@ -53,5 +53,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "engines": {
+    "yarn": "1.x"
+  }
 }
