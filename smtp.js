@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const multer = require('multer')
+const cors = require('cors')
 const nodemailer = require('nodemailer')
 
 require('dotenv').config({ path: '.env.local' })
@@ -9,8 +10,22 @@ const upload = multer()
 const app = express()
 
 const port = process.env.EXPRESS_PORT
+const allowedOrigins = ['http://localhost:5000', 'http://localhost:8080']
 
 app.use(bodyParser.json())
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          'The CORS policy for this site does not ' +
+          'allow access from the specified Origin.'
+        return callback(new Error(msg), false)
+      }
+      return callback(null, true)
+    }
+  })
+)
 
 app.post('/email', (req, res) => {
   const mailOptions = {
